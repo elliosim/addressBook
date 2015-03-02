@@ -1,13 +1,9 @@
-import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class AddressBookReaderTest extends TestCase {
+public class AddressBookReaderTest {
 
     @Test
     public void testOpenFile() {
@@ -18,9 +14,7 @@ public class AddressBookReaderTest extends TestCase {
     @Test
     public void testGetAddressBookData() {
         AddressBookReader addressBookReader = new AddressBookReader();
-        assertEquals(5, addressBookReader.getData().size());
+        assertEquals(5, addressBookReader.getDataFromFile().size());
     }
-
-
 
 }

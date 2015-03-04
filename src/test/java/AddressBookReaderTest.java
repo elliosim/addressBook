@@ -1,4 +1,7 @@
+import model.Person;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,6 +22,8 @@ public class AddressBookReaderTest {
 
     @Test
     public void testCountGenderOfAllEntries() {
-        assertEquals(3, reader.countGender("Male"));
+        AddressBookReader addressBook = new AddressBookReader();
+        List<Person> entries = addressBook.getAddressBookEntries();
+        assertEquals(3, AddressBookUtil.countGender("Male", entries));
     }
 }

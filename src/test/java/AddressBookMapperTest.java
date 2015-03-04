@@ -18,10 +18,13 @@ public class AddressBookMapperTest {
 
     @Mock Person person1;
     @Mock Person person2;
+    List<Person> addressBookEntries;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        AddressBookMapper mapper = new AddressBookMapper();
+        addressBookEntries = mapper.mapAddressBook(reader.getDataFromFile());
     }
 
     @Test
@@ -32,15 +35,13 @@ public class AddressBookMapperTest {
 
     @Test
     public void testPersonIsMapped() throws IOException {
-        AddressBookMapper mapper = new AddressBookMapper();
-        List<Person> addressBookEntries = mapper.mapAddressBook(reader.getDataFromFile());
         Person person = addressBookEntries.get(0);
         assertEquals("Bill McKnight", person.getName());
     }
 
     @Test
     public void testFindEldest() {
-        assertEquals("Wes Jackson", reader.getEldest().getName());
+        assertEquals("Wes Jackson", AddressBookUtil.getEldest(addressBookEntries).getName());
     }
 
     @Test
@@ -49,14 +50,14 @@ public class AddressBookMapperTest {
         when(person1.getDob()).thenReturn(sdf.parse("10/03/77"));
         when(person2.getDob()).thenReturn(sdf.parse("15/03/77"));
 
-        assertEquals(5, reader.findDaysDifference(person1, person2));
+        assertEquals(5, AddressBookUtil.findDaysDifference(person1, person2));
     }
 
     @Test
     public void testGetPersonByName() {
-        Person person = reader.getPersonByName("Bill McKnight");
+        Person person = AddressBookUtil.getPersonByName("Bill McKnight", addressBookEntries);
         assertEquals("Bill McKnight", person.getName());
-        person = reader.getPersonByName("Gemma Lane");
+        person = AddressBookUtil.getPersonByName("Gemma Lane", addressBookEntries);
         assertEquals("Gemma Lane", person.getName());
     }
 

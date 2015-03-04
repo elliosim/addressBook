@@ -1,10 +1,12 @@
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import model.Person;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,28 +15,29 @@ import java.util.Map;
  */
 public class AddressBookMapper {
 
-    public List getEntries() throws IOException {
+    public List<Person> mapAddressBook() throws IOException {
 
         AddressBookReader bookReader = new AddressBookReader();
+        List<String> entries = bookReader.getDataFromFile();
 
         CsvMapper mapper = new CsvMapper();
-        MappingIterator<Map<String,String>> it = mapper.reader(Map.class)
-                .with(getSchema())
-                .readValues(bookReader.getFile());
+        mapper.enable(CsvParser.Feature.TRIM_SPACES);
 
-        while (it.hasNext()) {
-            Map<String,String> rowAsMap = it.next();
-            System.out.println(rowAsMap);
+        List<Person> personEntries = new ArrayList<>();
+        for(String entry : entries) {
+            Person person = mapper.reader(Person.class).with(getSchema()).readValue(entry);
+            personEntries.add(person);
         }
 
-        return null;
+        return personEntries;
     }
 
     private CsvSchema getSchema() {
         return CsvSchema.builder()
                 .addColumn("name")
-                .addColumn("age", CsvSchema.ColumnType.NUMBER)
+                .addColumn("sex")
                 .addColumn("dob")
-                .build();
+                .build()
+                .withLineSeparator("\n");
     }
 }

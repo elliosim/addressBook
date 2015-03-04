@@ -1,5 +1,7 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -8,7 +10,9 @@ import java.util.Date;
 public class Person {
 
     private String name;
-    private int age;
+    private String sex;
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd/MM/yy", timezone="GMT")
     private Date dob;
 
     public String getName() {
@@ -19,12 +23,12 @@ public class Person {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
+    public String getSex() {
+        return sex;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public Date getDob() {

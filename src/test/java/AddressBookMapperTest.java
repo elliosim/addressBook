@@ -1,18 +1,26 @@
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import junit.framework.TestCase;
+import model.Person;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class AddressBookMapperTest {
 
     @Test
-    public void testMapData() throws IOException {
+    public void testMapAllEntries() throws IOException {
         AddressBookMapper mapper = new AddressBookMapper();
-        mapper.getEntries();
-//        assertEquals(5, mapper.getEntries().size());
+        assertEquals(5, mapper.mapAddressBook().size());
+    }
+
+    @Test
+    public void testPersonIsMapped() throws IOException {
+        AddressBookMapper mapper = new AddressBookMapper();
+        List<Person> addressBookEntries = mapper.mapAddressBook();
+        Person person = addressBookEntries.get(0);
+        assertEquals("Bill McKnight", person.getName());
     }
 
 

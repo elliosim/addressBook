@@ -5,16 +5,23 @@ import static org.junit.Assert.assertTrue;
 
 public class AddressBookReaderTest {
 
+    AddressBookReader reader = new AddressBookReader();
+
     @Test
     public void testOpenFile() {
-        AddressBookReader addressBookReader = new AddressBookReader();
-        assertTrue(addressBookReader.getFile().exists());
+        assertTrue(reader.getFile().exists());
     }
 
     @Test
     public void testGetAddressBookData() {
-        AddressBookReader addressBookReader = new AddressBookReader();
-        assertEquals(5, addressBookReader.getDataFromFile().size());
+        assertEquals(5, reader.getDataFromFile().size());
     }
+
+    @Test
+    public void testCountGenderOfAllEntries() {
+        assertEquals(3, reader.countGender("Male"));
+    }
+
+
 
 }

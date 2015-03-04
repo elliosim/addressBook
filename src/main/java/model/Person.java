@@ -10,7 +10,7 @@ import java.util.Date;
 public class Person {
 
     private String name;
-    private String sex;
+    private String gender;
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd/MM/yy", timezone="GMT")
     private Date dob;
@@ -23,12 +23,12 @@ public class Person {
         this.name = name;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Date getDob() {

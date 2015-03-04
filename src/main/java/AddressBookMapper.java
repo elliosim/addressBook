@@ -15,17 +15,19 @@ import java.util.Map;
  */
 public class AddressBookMapper {
 
-    public List<Person> mapAddressBook() throws IOException {
-
-        AddressBookReader bookReader = new AddressBookReader();
-        List<String> entries = bookReader.getDataFromFile();
+    public List<Person> mapAddressBook(List<String> entries) {
 
         CsvMapper mapper = new CsvMapper();
         mapper.enable(CsvParser.Feature.TRIM_SPACES);
 
         List<Person> personEntries = new ArrayList<>();
         for(String entry : entries) {
-            Person person = mapper.reader(Person.class).with(getSchema()).readValue(entry);
+            Person person = null;
+            try {
+                person = mapper.reader(Person.class).with(getSchema()).readValue(entry);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             personEntries.add(person);
         }
 
@@ -35,7 +37,7 @@ public class AddressBookMapper {
     private CsvSchema getSchema() {
         return CsvSchema.builder()
                 .addColumn("name")
-                .addColumn("sex")
+                .addColumn("gender")
                 .addColumn("dob")
                 .build()
                 .withLineSeparator("\n");

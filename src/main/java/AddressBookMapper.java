@@ -1,5 +1,3 @@
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -8,7 +6,6 @@ import model.Person;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by simon on 02/03/15.
@@ -20,7 +17,7 @@ public class AddressBookMapper {
         CsvMapper mapper = new CsvMapper();
         mapper.enable(CsvParser.Feature.TRIM_SPACES);
 
-        List<Person> personEntries = new ArrayList<>();
+        List<Person> personEntries = new ArrayList<Person>();
         for(String entry : entries) {
             Person person = null;
             try {

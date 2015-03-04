@@ -21,7 +21,4 @@ public class AddressBookReaderTest {
     public void testCountGenderOfAllEntries() {
         assertEquals(3, reader.countGender("Male"));
     }
-
-
-
 }

@@ -2,34 +2,36 @@ import model.Person;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by simon on 02/03/15.
+ *
+ * TODO Refactor and extract an AddressBook model
  */
 public class AddressBookReader {
 
     private static final String DATA_FILE = "/AddressBook";
 
     AddressBookMapper mapper = new AddressBookMapper();
-    private String eldest;
 
     public static void main(String[] args) {
 
-        AddressBookReader reader = new AddressBookReader();
+        AddressBookReader addressBook = new AddressBookReader();
 
         // How many males are in the address book?
-        System.out.println("There are " + reader.countGender("Male") + " Male entries in the address book.");
+        System.out.println("There are " + addressBook.countGender("Male") + " Male entries in the address book.");
 
         // Who is the oldest person in the address book?
-
-
+        System.out.println("The oldest person is " + addressBook.getEldest().getName());
 
         // How many days older is Bill than Paul?
+        Person bill = addressBook.getPersonByName("Bill McKnight");
+        Person paul = addressBook.getPersonByName("Paul Robinson");
+        long days = addressBook.findDaysDifference(bill, paul);
+        System.out.println("Bill is " + days + " days older than Paul");
     }
 
 
@@ -38,10 +40,14 @@ public class AddressBookReader {
         return new File(url.getFile());
     }
 
+    public List<Person> getAddressBookEntries() {
+        return mapper.mapAddressBook(getDataFromFile());
+    }
+
     public List<String> getDataFromFile() {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
         try {
-            String line = "";
+            String line;
             BufferedReader file = new BufferedReader(new FileReader(getFile()));
             while((line = file.readLine()) != null) {
                 list.add(line);
@@ -54,16 +60,43 @@ public class AddressBookReader {
         return list;
     }
 
-    public int countGender(String male) {
-        List<Person> addressBookEntries = mapper.mapAddressBook(getDataFromFile());
+    public int countGender(String gender) {
         int genderCount = 0;
-        for(Person person : addressBookEntries) {
-            if("Male".equals(person.getGender())) {
+        for(Person person : getAddressBookEntries()) {
+            if(gender.equals(person.getGender())) {
                 genderCount++;
             }
         }
         return genderCount;
     }
 
+    public Person getEldest() {
+        List<Person> addressBookEntries = getAddressBookEntries();
+        Person eldestPerson = null;
+        for(Person person : addressBookEntries) {
+            if(eldestPerson == null) {
+                eldestPerson = person;
+                continue;
+            }
+            if(person.getDob().compareTo(eldestPerson.getDob())<0) {
+                eldestPerson = person;
+            }
 
+        }
+        return eldestPerson;
+    }
+
+    public Person getPersonByName(String name) {
+        for(Person person : getAddressBookEntries()) {
+            if(name.equals(person.getName())) {
+                return person;
+            }
+        }
+        return null;
+    }
+
+    public long findDaysDifference(Person person1, Person person2) {
+        long diffMillis = person2.getDob().getTime() - person1.getDob().getTime();
+        return TimeUnit.DAYS.convert(diffMillis, TimeUnit.MILLISECONDS);
+    }
 }
